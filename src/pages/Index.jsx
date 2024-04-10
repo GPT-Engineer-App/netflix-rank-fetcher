@@ -10,7 +10,7 @@ const Index = () => {
   const fetchRatings = async () => {
     const showList = shows.split(/[,\n]/).map((show) => show.trim());
     const ratingPromises = showList.map(async (show) => {
-      const response = await fetch(`http://www.omdbapi.com/?t=${encodeURIComponent(show)}&apikey=${API_KEY}`);
+      const response = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(show)}&apikey=${API_KEY}`);
       const data = await response.json();
       return { title: data.Title, rating: data.imdbRating };
     });
