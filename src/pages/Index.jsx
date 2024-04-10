@@ -12,7 +12,7 @@ const Index = () => {
     const ratingPromises = showList.map(async (show) => {
       const response = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(show)}&apikey=${API_KEY}`);
       const data = await response.json();
-      return { title: data.Title, rating: data.imdbRating };
+      return { title: data.Title, rating: data.imdbRating, runtime: data.Runtime, year: data.Year };
     });
 
     const ratingResults = await Promise.all(ratingPromises);
@@ -36,6 +36,8 @@ const Index = () => {
               <Tr>
                 <Th>Show</Th>
                 <Th>Rating</Th>
+                <Th>Runtime</Th>
+                <Th>Year</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -43,6 +45,8 @@ const Index = () => {
                 <Tr key={index}>
                   <Td>{show.title}</Td>
                   <Td>{show.rating}</Td>
+                  <Td>{show.runtime}</Td>
+                  <Td>{show.year}</Td>
                 </Tr>
               ))}
             </Tbody>
