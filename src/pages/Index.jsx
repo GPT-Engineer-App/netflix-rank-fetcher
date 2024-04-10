@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Heading, Textarea, Button, Table, Thead, Tbody, Tr, Th, Td, TableContainer } from "@chakra-ui/react";
 
-const API_KEY = "YOUR_OMDB_API_KEY";
+const API_KEY = "28404aa5";
 
 const Index = () => {
   const [shows, setShows] = useState("");
