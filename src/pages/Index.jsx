@@ -35,7 +35,7 @@ const Index = () => {
       <Button colorScheme="blue" onClick={fetchRatings}>
         Get Ratings
       </Button>
-      {ratings.length > 0 && (
+      {(ratings.length > 0 || showsWithoutInfo.length > 0) && (
         <TableContainer marginTop="20px">
           <Table variant="simple">
             <Thead>
