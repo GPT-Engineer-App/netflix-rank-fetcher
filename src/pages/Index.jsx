@@ -1,18 +1,24 @@
 import React, { useState } from "react";
-import { Box, Heading, Textarea, Button, Table, Thead, Tbody, Tr, Th, Td, TableContainer } from "@chakra-ui/react";
+import { Box, Heading, Textarea, Button, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Text } from "@chakra-ui/react";
 
 const API_KEY = "28404aa5";
 
 const Index = () => {
   const [shows, setShows] = useState("");
   const [ratings, setRatings] = useState([]);
+  const [showsWithoutInfo, setShowsWithoutInfo] = useState([]);
 
   const fetchRatings = async () => {
     const showList = shows.split(/[,\n]/).map((show) => show.trim());
     const ratingPromises = showList.map(async (show) => {
       const response = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(show)}&apikey=${API_KEY}`);
       const data = await response.json();
-      return { title: data.Title, rating: data.imdbRating, runtime: data.Runtime, year: data.Year };
+      if (data.Response === "True") {
+        return { title: data.Title, rating: data.imdbRating, runtime: data.Runtime, year: data.Year };
+      } else {
+        setShowsWithoutInfo((prevShows) => [...prevShows, show]);
+        return null;
+      }
     });
 
     const ratingResults = await Promise.all(ratingPromises);
@@ -52,6 +58,12 @@ const Index = () => {
             </Tbody>
           </Table>
         </TableContainer>
+      )}
+      {showsWithoutInfo.length > 0 && (
+        <Box marginTop="20px">
+          <Text fontWeight="bold">Shows w/o Info:</Text>
+          <Textarea value={showsWithoutInfo.join("\n")} readOnly />
+        </Box>
       )}
     </Box>
   );
