@@ -22,7 +22,8 @@ const Index = () => {
     });
 
     const ratingResults = await Promise.all(ratingPromises);
-    const sortedRatings = ratingResults.sort((a, b) => b.rating - a.rating);
+    const filteredRatings = ratingResults.filter((rating) => rating !== null);
+    const sortedRatings = filteredRatings.sort((a, b) => b.rating - a.rating);
     setRatings(sortedRatings);
   };
 
