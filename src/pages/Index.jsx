@@ -63,7 +63,7 @@ const Index = () => {
       {showsWithoutInfo.length > 0 && (
         <Box marginTop="20px">
           <Text fontWeight="bold">Shows w/o Info:</Text>
-          <Textarea value={showsWithoutInfo.join("\n")} readOnly />
+          <Textarea value={showsWithoutInfo.filter((show) => show.trim() !== "").join("\n")} readOnly />
         </Box>
       )}
     </Box>
