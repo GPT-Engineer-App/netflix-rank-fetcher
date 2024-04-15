@@ -11,11 +11,14 @@ const Index = () => {
   const fetchRatings = async () => {
     const showList = shows.split(/[,\n]/).map((show) => show.trim());
     const ratingPromises = showList.map(async (show) => {
-      const response = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(show)}`);
-      const data = await response.json();
-      if (data.results.length > 0) {
-        const showData = data.results[0];
-        return { title: showData.name, rating: showData.vote_average, year: showData.first_air_date.substring(0, 4) };
+      const searchResponse = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(show)}`);
+      const searchData = await searchResponse.json();
+      if (searchData.results.length > 0) {
+        const showData = searchData.results[0];
+        const showId = showData.id;
+        const detailsResponse = await fetch(`https://api.themoviedb.org/3/tv/${showId}?api_key=${API_KEY}`);
+        const detailsData = await detailsResponse.json();
+        return { title: showData.name, rating: showData.vote_average, year: showData.first_air_date.substring(0, 4), status: detailsData.status };
       } else {
         setShowsWithoutInfo((prevShows) => [...prevShows, show]);
         return null;
@@ -44,8 +47,8 @@ const Index = () => {
               <Tr>
                 <Th>Show</Th>
                 <Th>Rating</Th>
-                <Th>Runtime</Th>
                 <Th>Year</Th>
+                <Th>Status</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -53,8 +56,8 @@ const Index = () => {
                 <Tr key={index}>
                   <Td>{show.title}</Td>
                   <Td>{show.rating}</Td>
-                  <Td>{show.runtime}</Td>
                   <Td>{show.year}</Td>
+                  <Td>{show.status}</Td>
                 </Tr>
               ))}
             </Tbody>
