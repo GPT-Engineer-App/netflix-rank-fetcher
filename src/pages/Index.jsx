@@ -69,7 +69,7 @@ const Index = () => {
                   <Td>{show.rating}</Td>
                   <Td>{show.year}</Td>
                   <Td>{show.status}</Td>
-                  <Td>{show.avgRunTime} min</Td>
+                  <Td>{show.avgRunTime ? `${show.avgRunTime} min` : ""}</Td>
                   <Td>{show.totalEpisodes}</Td>
                   <Td>{show.seasons}</Td>
                 </Tr>
