@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box, Heading, Textarea, Button, Table, Thead, Tbody, Tr, Th, Td, TableContainer, Text } from "@chakra-ui/react";
 
-const API_KEY = "28404aa5";
+const API_KEY = "2179f7eea93659d15bcc81f4aef758c6";
 
 const Index = () => {
   const [shows, setShows] = useState("");
@@ -11,10 +11,11 @@ const Index = () => {
   const fetchRatings = async () => {
     const showList = shows.split(/[,\n]/).map((show) => show.trim());
     const ratingPromises = showList.map(async (show) => {
-      const response = await fetch(`https://www.omdbapi.com/?t=${encodeURIComponent(show)}&apikey=${API_KEY}`);
+      const response = await fetch(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${encodeURIComponent(show)}`);
       const data = await response.json();
-      if (data.Response === "True") {
-        return { title: data.Title, rating: data.imdbRating, runtime: data.Runtime, year: data.Year };
+      if (data.results.length > 0) {
+        const showData = data.results[0];
+        return { title: showData.name, rating: showData.vote_average, year: showData.first_air_date.substring(0, 4) };
       } else {
         setShowsWithoutInfo((prevShows) => [...prevShows, show]);
         return null;
