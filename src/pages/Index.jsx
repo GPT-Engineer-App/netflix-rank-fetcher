@@ -18,7 +18,15 @@ const Index = () => {
         const showId = showData.id;
         const detailsResponse = await fetch(`https://api.themoviedb.org/3/tv/${showId}?api_key=${API_KEY}`);
         const detailsData = await detailsResponse.json();
-        return { title: showData.name, rating: showData.vote_average, year: showData.first_air_date.substring(0, 4), status: detailsData.status };
+        return {
+          title: showData.name,
+          rating: showData.vote_average,
+          year: showData.first_air_date.substring(0, 4),
+          status: detailsData.status,
+          avgRunTime: detailsData.episode_run_time[0],
+          totalEpisodes: detailsData.number_of_episodes,
+          seasons: detailsData.number_of_seasons,
+        };
       } else {
         setShowsWithoutInfo((prevShows) => [...prevShows, show]);
         return null;
@@ -49,6 +57,9 @@ const Index = () => {
                 <Th>Rating</Th>
                 <Th>Year</Th>
                 <Th>Status</Th>
+                <Th>Avg Run Time</Th>
+                <Th>Total Episodes</Th>
+                <Th>Seasons</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -58,6 +69,9 @@ const Index = () => {
                   <Td>{show.rating}</Td>
                   <Td>{show.year}</Td>
                   <Td>{show.status}</Td>
+                  <Td>{show.avgRunTime} min</Td>
+                  <Td>{show.totalEpisodes}</Td>
+                  <Td>{show.seasons}</Td>
                 </Tr>
               ))}
             </Tbody>
