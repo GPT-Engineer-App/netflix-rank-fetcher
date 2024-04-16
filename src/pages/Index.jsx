@@ -62,63 +62,73 @@ const Index = () => {
         Get Ratings
       </Button>
       {seriesRatings.length > 0 && (
-        <TableContainer marginTop="20px">
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>Show</Th>
-                <Th>Rating</Th>
-                <Th>Year</Th>
-                <Th>Status</Th>
-                <Th>Avg Run Time</Th>
-                <Th>Total Episodes</Th>
-                <Th>Seasons</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {seriesRatings.map((show, index) => (
-                <Tr key={index}>
-                  <Td>{show.title}</Td>
-                  <Td>{show.rating}</Td>
-                  <Td>{show.year}</Td>
-                  <Td>{show.status}</Td>
-                  <Td>{show.avgRunTime ? `${show.avgRunTime} min` : ""}</Td>
-                  <Td>{show.totalEpisodes}</Td>
-                  <Td>{show.seasons}</Td>
+        <Box marginTop="20px">
+          <Text fontSize="lg" fontWeight="bold" marginBottom="10px">
+            Series Ranked
+          </Text>
+          <TableContainer width="full">
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>Show</Th>
+                  <Th>Rating</Th>
+                  <Th>Year</Th>
+                  <Th>Status</Th>
+                  <Th>Avg Run Time</Th>
+                  <Th>Total Episodes</Th>
+                  <Th>Seasons</Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+              </Thead>
+              <Tbody>
+                {seriesRatings.map((show, index) => (
+                  <Tr key={index}>
+                    <Td>{show.title}</Td>
+                    <Td>{show.rating}</Td>
+                    <Td>{show.year}</Td>
+                    <Td>{show.status}</Td>
+                    <Td>{show.avgRunTime ? `${show.avgRunTime} min` : ""}</Td>
+                    <Td>{show.totalEpisodes}</Td>
+                    <Td>{show.seasons}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Box>
       )}
       {movieRatings.length > 0 && (
-        <TableContainer marginTop="20px">
-          <Table variant="simple">
-            <Thead>
-              <Tr>
-                <Th>Movie</Th>
-                <Th>Rating</Th>
-                <Th>Year</Th>
-              </Tr>
-            </Thead>
-            <Tbody>
-              {movieRatings.map((movie, index) => (
-                <Tr key={index}>
-                  <Td>{movie.title}</Td>
-                  <Td>{movie.rating}</Td>
-                  <Td>{movie.year}</Td>
+        <Box marginTop="20px">
+          <Text fontSize="lg" fontWeight="bold" marginBottom="10px">
+            Movies Ranked
+          </Text>
+          <TableContainer width="full">
+            <Table variant="simple">
+              <Thead>
+                <Tr>
+                  <Th>Movie</Th>
+                  <Th>Rating</Th>
+                  <Th>Year</Th>
                 </Tr>
-              ))}
-            </Tbody>
-          </Table>
-        </TableContainer>
+              </Thead>
+              <Tbody>
+                {movieRatings.map((movie, index) => (
+                  <Tr key={index}>
+                    <Td>{movie.title}</Td>
+                    <Td>{movie.rating}</Td>
+                    <Td>{movie.year}</Td>
+                  </Tr>
+                ))}
+              </Tbody>
+            </Table>
+          </TableContainer>
+        </Box>
       )}
-      {titlesWithoutInfo.length > 0 && (
+      {titlesWithoutInfo.length > 0 ? (
         <Box marginTop="20px">
           <Text fontWeight="bold">Titles w/o Info:</Text>
           <Textarea value={titlesWithoutInfo.join("\n")} readOnly />
         </Box>
-      )}
+      ) : null}
     </Box>
   );
 };
