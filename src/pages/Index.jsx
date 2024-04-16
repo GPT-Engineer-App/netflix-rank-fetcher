@@ -123,12 +123,12 @@ const Index = () => {
           </TableContainer>
         </Box>
       )}
-      {titlesWithoutInfo.length > 0 ? (
+      {titlesWithoutInfo.length > 0 && (
         <Box marginTop="20px">
           <Text fontWeight="bold">Titles w/o Info:</Text>
           <Textarea value={titlesWithoutInfo.join("\n")} readOnly />
         </Box>
-      ) : null}
+      )}
     </Box>
   );
 };
