@@ -5,8 +5,9 @@ const API_KEY = "2179f7eea93659d15bcc81f4aef758c6";
 
 const Index = () => {
   const [shows, setShows] = useState("");
-  const [ratings, setRatings] = useState([]);
-  const [showsWithoutInfo, setShowsWithoutInfo] = useState([]);
+  const [seriesRatings, setSeriesRatings] = useState([]);
+  const [movieRatings, setMovieRatings] = useState([]);
+  const [titlesWithoutInfo, setTitlesWithoutInfo] = useState([]);
 
   const fetchRatings = async () => {
     const showList = shows.split(/[,\n]/).map((show) => show.trim());
@@ -15,28 +16,41 @@ const Index = () => {
       const searchData = await searchResponse.json();
       if (searchData.results.length > 0) {
         const showData = searchData.results[0];
-        const showId = showData.id;
-        const detailsResponse = await fetch(`https://api.themoviedb.org/3/tv/${showId}?api_key=${API_KEY}`);
-        const detailsData = await detailsResponse.json();
-        return {
-          title: showData.name,
-          rating: showData.vote_average,
-          year: showData.first_air_date.substring(0, 4),
-          status: detailsData.status,
-          avgRunTime: detailsData.episode_run_time[0],
-          totalEpisodes: detailsData.number_of_episodes,
-          seasons: detailsData.number_of_seasons,
-        };
+        if (showData.media_type === "tv") {
+          const showId = showData.id;
+          const detailsResponse = await fetch(`https://api.themoviedb.org/3/tv/${showId}?api_key=${API_KEY}`);
+          const detailsData = await detailsResponse.json();
+          return {
+            type: "series",
+            title: showData.name,
+            rating: showData.vote_average,
+            year: showData.first_air_date.substring(0, 4),
+            status: detailsData.status,
+            avgRunTime: detailsData.episode_run_time[0],
+            totalEpisodes: detailsData.number_of_episodes,
+            seasons: detailsData.number_of_seasons,
+          };
+        } else if (showData.media_type === "movie") {
+          return {
+            type: "movie",
+            title: showData.title,
+            rating: showData.vote_average,
+            year: showData.release_date.substring(0, 4),
+          };
+        }
       } else {
-        setShowsWithoutInfo((prevShows) => [...prevShows, show]);
+        setTitlesWithoutInfo((prevTitles) => [...prevTitles, show]);
         return null;
       }
     });
 
     const ratingResults = await Promise.all(ratingPromises);
-    const filteredRatings = ratingResults.filter((rating) => rating !== null);
-    const sortedRatings = filteredRatings.sort((a, b) => b.rating - a.rating);
-    setRatings(sortedRatings);
+    const seriesResults = ratingResults.filter((rating) => rating !== null && rating.type === "series");
+    const movieResults = ratingResults.filter((rating) => rating !== null && rating.type === "movie");
+    const sortedSeriesRatings = seriesResults.sort((a, b) => b.rating - a.rating);
+    const sortedMovieRatings = movieResults.sort((a, b) => b.rating - a.rating);
+    setSeriesRatings(sortedSeriesRatings);
+    setMovieRatings(sortedMovieRatings);
   };
 
   return (
@@ -48,7 +62,7 @@ const Index = () => {
       <Button colorScheme="blue" onClick={fetchRatings}>
         Get Ratings
       </Button>
-      {(ratings.length > 0 || showsWithoutInfo.length > 0) && (
+      {(seriesRatings.length > 0 || movieRatings.length > 0 || titlesWithoutInfo.length > 0) && (
         <TableContainer marginTop="20px">
           <Table variant="simple">
             <Thead>
@@ -63,7 +77,7 @@ const Index = () => {
               </Tr>
             </Thead>
             <Tbody>
-              {ratings.map((show, index) => (
+              {seriesRatings.map((show, index) => (
                 <Tr key={index}>
                   <Td>{show.title}</Td>
                   <Td>{show.rating}</Td>
@@ -78,10 +92,10 @@ const Index = () => {
           </Table>
         </TableContainer>
       )}
-      {showsWithoutInfo.length > 0 && (
+      {titlesWithoutInfo.length > 0 && (
         <Box marginTop="20px">
-          <Text fontWeight="bold">Shows w/o Info:</Text>
-          <Textarea value={showsWithoutInfo.filter((show) => show.trim() !== "").join("\n")} readOnly />
+          <Text fontWeight="bold">Titles w/o Info:</Text>
+          <Textarea value={titlesWithoutInfo.filter((title) => title.trim() !== "").join("\n")} readOnly />
         </Box>
       )}
     </Box>
