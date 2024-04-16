@@ -61,7 +61,7 @@ const Index = () => {
       <Button colorScheme="blue" onClick={fetchRatings}>
         Get Ratings
       </Button>
-      {(seriesRatings.length > 0 || movieRatings.length > 0 || titlesWithoutInfo.length > 0) && (
+      {seriesRatings.length > 0 && (
         <TableContainer marginTop="20px">
           <Table variant="simple">
             <Thead>
@@ -91,10 +91,32 @@ const Index = () => {
           </Table>
         </TableContainer>
       )}
+      {movieRatings.length > 0 && (
+        <TableContainer marginTop="20px">
+          <Table variant="simple">
+            <Thead>
+              <Tr>
+                <Th>Movie</Th>
+                <Th>Rating</Th>
+                <Th>Year</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {movieRatings.map((movie, index) => (
+                <Tr key={index}>
+                  <Td>{movie.title}</Td>
+                  <Td>{movie.rating}</Td>
+                  <Td>{movie.year}</Td>
+                </Tr>
+              ))}
+            </Tbody>
+          </Table>
+        </TableContainer>
+      )}
       {titlesWithoutInfo.length > 0 && (
         <Box marginTop="20px">
           <Text fontWeight="bold">Titles w/o Info:</Text>
-          <Textarea value={titlesWithoutInfo.filter((title) => title.trim() !== "").join("\n")} readOnly />
+          <Textarea value={titlesWithoutInfo.join("\n")} readOnly />
         </Box>
       )}
     </Box>
