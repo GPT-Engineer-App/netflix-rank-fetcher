@@ -53,7 +53,7 @@ const Index = () => {
   };
 
   return (
-    <Box maxWidth="600px" margin="auto" padding="20px">
+    <Box maxWidth="800px" margin="auto" padding="20px">
       <Heading as="h1" size="xl" textAlign="center" marginBottom="20px">
         Netflix Shows Rating
       </Heading>
